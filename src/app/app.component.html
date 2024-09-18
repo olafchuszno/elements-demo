@@ -3,9 +3,8 @@
   <h1 class="main-title">Periodic Elements</h1>
 
   <input
-    (input)="filterElements(filter.value)"
+  [formControl]="filterInput"
     type="text"
-    #filter
   >
 
   <table>
