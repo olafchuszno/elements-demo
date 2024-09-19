@@ -2,13 +2,70 @@
 <main class="main">
   <h1 class="main-title">Periodic Elements</h1>
 
-  <input
-  [formControl]="filterInput"
-    type="text"
-  >
+  <form *ngIf="isPopUpOpen">
+    <input
+      [type]="elementUnderEdit?.field === 'weight' ? 'number' : 'text'"
+      #newValue
+    >
 
-  <table>
-    <thead>
+    <button
+      (click)="finishEditingElement(newValue.value)"
+      type="button"
+    >
+      Change
+    </button>
+  </form>
+
+
+  <mat-form-field>
+    <input
+      matInput
+      [formControl]="filterInput"
+      type="text"
+      placeholder="Filter elements"
+    />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="filteredElements">
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef>
+        Number
+      </th>
+      <td mat-cell *matCellDef="let element">{{element.position}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>
+        Name
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.name}}
+
+        <button (click)="startEditingElement(element.position, 'name')" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef>
+        Weight
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{element.weight}}
+        <button (click)="startEditingElement(element.position, 'weight')" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef>
+        Symbol
+      </th>
+      <td mat-cell *matCellDef="let element">{{element.symbol}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
+
+    <!-- <thead>
       <tr>
         <th>Number</th>
         <th>Name</th>
@@ -24,7 +81,7 @@
         <td>{{element.weight}}</td>
         <td>{{element.symbol}}</td>
       </tr>
-    </tbody>
+    </tbody> -->
   </table>
 </main>
 
