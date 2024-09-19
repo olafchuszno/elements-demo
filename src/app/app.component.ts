@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,11 @@ import { ElementsService } from './elements.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 
 export interface PeriodicElement {
   position: number;
@@ -19,10 +23,10 @@ export interface PeriodicElement {
 
 type ElementField = keyof PeriodicElement;
 
-
-interface ElementUnderEdit {
-  position: number,
-  field: ElementField
+interface EditedElementData {
+  position: number;
+  field: ElementField;
+  newValue: string | number;
 }
 
 @Component({
@@ -55,19 +59,12 @@ export class AppComponent {
 
   isPopUpOpen: boolean = false;
 
-  elementUnderEdit: ElementUnderEdit | null = null;
-
   // Dialog model values
   // newValue: string | null = null;
 
   readonly dialog = inject(MatDialog);
 
-  tableColumns: string[] = [
-    'position',
-    'name',
-    'weight',
-    'symbol'
-  ];
+  tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   constructor() {
     this.elementsService.getAllElements().then((elements) => {
@@ -80,55 +77,52 @@ export class AppComponent {
       .subscribe((text: string | null) => this.filterElements(text || ''));
   }
 
-  openDialog(position: number, field: ElementField): void {
+  openDialog(
+    position: number,
+    elementName: string,
+    field: ElementField,
+    currentValue: string | number
+  ): void {
     const dialogRef = this.dialog.open(ElementChangeDialog, {
       data: {
         position,
+        elementName,
         field,
-        elements: this.elements
-      }
+        currentValue,
+      },
     });
 
-    // If this underneath works - consider removing the top part
+    // Code underneath works - consider removing config with data from dialog.open above
     // And  learn how to make JUST the top part work -
     // and if it would really be easier to just pass the data into the dialog
     // - why would that be better ?
-    this.elementUnderEdit = {position, field};
+    // this.elementUnderEdit = {position, field};
 
-    dialogRef.afterClosed().subscribe((value) => {
-      if (value !== undefined) {
+    dialogRef.afterClosed().subscribe((newValue) => {
+      if (newValue !== undefined) {
         console.log('POPUP CLOSED. VALUE UNDER');
-        console.log(value);
-        this.finishEditingElement(value)
+        console.log(newValue);
+        this.finishEditingElement({ position, field, newValue });
       }
-    })
+    });
   }
 
-  openPopUp() {
-    this.isPopUpOpen = true;
-  }
+  finishEditingElement(editedElementData: EditedElementData) {
+    const { position, field, newValue } = editedElementData;
+    const newConvertedValue = field === 'weight' ? +newValue : newValue;
 
-  closePopUp() {
-    this.isPopUpOpen = false;
-  }
+    this.updateElementValue('filteredElements', {
+      position,
+      field,
+      newValue: newConvertedValue,
+    });
+    this.updateElementValue('elements', {
+      position,
+      field,
+      newValue: newConvertedValue,
+    });
 
-  startEditingElement(position: number, field: ElementField) {
-    this.isPopUpOpen = !this.isPopUpOpen;
-
-    this.elementUnderEdit = {position, field};
-  }
-
-  finishEditingElement(newValue: string) {
-    const newConvertedValue = this.elementUnderEdit?.field === 'weight' ? +newValue : newValue;
-
-    this.updateElementValue('filteredElements', newConvertedValue);
-
-    this.updateElementValue('elements', newConvertedValue);
-
-    console.log({elements: this.elements})
-
-    this.closePopUp();
-    this.elementUnderEdit = null;
+    console.log({ elements: this.elements });
   }
 
   filterElements(text: string): void {
@@ -141,24 +135,28 @@ export class AppComponent {
     });
   }
 
-  updateElementValue(elementsArray: 'elements' | 'filteredElements', newConvertedValue: string | number) {
-    console.log('Changing logic | newConvertedValue = ', newConvertedValue);
-    console.log('field to change = ', this.elementUnderEdit?.field);
-    console.log('position = ', this.elementUnderEdit?.position);
+  updateElementValue(
+    elementsArray: 'elements' | 'filteredElements',
+    editedElementData: EditedElementData
+  ) {
+    const { position, field, newValue } = editedElementData;
+
+    console.log('Changing logic | newConvertedValue = ', newValue);
+    console.log('field to change = ', field);
+    console.log('position = ', position);
 
     this[elementsArray] = this[elementsArray].map((element) => {
-      if (element.position === this.elementUnderEdit?.position) {
+      if (element.position === position) {
         return {
           ...element,
-          [this.elementUnderEdit.field]: newConvertedValue
-        }
+          [field]: newValue,
+        };
       } else {
         return element;
       }
     });
   }
 }
-
 
 // DIALOG COMPONENT
 @Component({
@@ -174,11 +172,24 @@ export class AppComponent {
   ],
 })
 export class ElementChangeDialog {
-  // Inject elements form App Component
-  // appComponent = inject(AppComponent);
-  // elements = this.appComponent.elements;
+  /* Inject elements form App Component with the MAT_DIALOG_DATA
+  this way we have access to the edited element's data */
+  public data: {
+    position: number
+    elementName: string;
+    field: ElementField
+    currentValue: string | number
+  }
 
-  constructor() {
-
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    data: {
+      position: number;
+      elementName: string;
+      field: ElementField;
+      currentValue: string | number;
+    }
+  ) {
+    this.data = data;
   }
 }

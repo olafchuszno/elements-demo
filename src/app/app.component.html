@@ -26,7 +26,7 @@
       <td mat-cell *matCellDef="let element">
         {{element.name}}
 
-        <button (click)="openDialog(element.position, 'name')" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
+        <button (click)="openDialog(element.position, element.name, 'name', element.name)" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
       </td>
     </ng-container>
 
@@ -37,7 +37,7 @@
 
       <td mat-cell *matCellDef="let element">
         {{element.weight}}
-        <button (click)="openDialog(element.position, 'weight')" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
+        <button (click)="openDialog(element.position, element.name, 'weight', element.weight)" style="border: none; background-color: E9E0E4; color: darkmagenta;">edit</button>
       </td>
     </ng-container>
 
