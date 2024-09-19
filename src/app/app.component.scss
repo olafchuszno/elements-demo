@@ -1,5 +1,12 @@
+@use '../variables' as *;
+
+.main {
+  max-width: 1024px;
+}
+
 .main-title {
-  color: red;
+  padding-top: 48px;
+  color: $color-text;
 }
 
 .edit-button {
@@ -9,6 +16,11 @@
     width: 20px;
     height: 20px;
   }
+}
+
+.elements-table {
+  padding: 10px 20px;
+  border-radius: 16px;
 }
 
 .table-data-content {
