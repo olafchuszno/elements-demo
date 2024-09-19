@@ -1,0 +1,15 @@
+<h2 mat-dialog-content>Change Value</h2>
+
+<mat-dialog-content>
+  This will change the value of the periodic element.
+
+  <mat-form-field>
+    <input matInput type="text" #newValue >
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+
+  <button mat-button [mat-dialog-close]="newValue.value">Change the Value</button>
+</mat-dialog-actions>

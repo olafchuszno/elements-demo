@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,7 @@ import { ElementsService } from './elements.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 export interface PeriodicElement {
   position: number;
@@ -57,6 +57,11 @@ export class AppComponent {
 
   elementUnderEdit: ElementUnderEdit | null = null;
 
+  // Dialog model values
+  // newValue: string | null = null;
+
+  readonly dialog = inject(MatDialog);
+
   tableColumns: string[] = [
     'position',
     'name',
@@ -73,6 +78,30 @@ export class AppComponent {
     this.filterInput.valueChanges
       .pipe(debounceTime(2000), distinctUntilChanged())
       .subscribe((text: string | null) => this.filterElements(text || ''));
+  }
+
+  openDialog(position: number, field: ElementField): void {
+    const dialogRef = this.dialog.open(ElementChangeDialog, {
+      data: {
+        position,
+        field,
+        elements: this.elements
+      }
+    });
+
+    // If this underneath works - consider removing the top part
+    // And  learn how to make JUST the top part work -
+    // and if it would really be easier to just pass the data into the dialog
+    // - why would that be better ?
+    this.elementUnderEdit = {position, field};
+
+    dialogRef.afterClosed().subscribe((value) => {
+      if (value !== undefined) {
+        console.log('POPUP CLOSED. VALUE UNDER');
+        console.log(value);
+        this.finishEditingElement(value)
+      }
+    })
   }
 
   openPopUp() {
@@ -113,6 +142,10 @@ export class AppComponent {
   }
 
   updateElementValue(elementsArray: 'elements' | 'filteredElements', newConvertedValue: string | number) {
+    console.log('Changing logic | newConvertedValue = ', newConvertedValue);
+    console.log('field to change = ', this.elementUnderEdit?.field);
+    console.log('position = ', this.elementUnderEdit?.position);
+
     this[elementsArray] = this[elementsArray].map((element) => {
       if (element.position === this.elementUnderEdit?.position) {
         return {
@@ -123,5 +156,29 @@ export class AppComponent {
         return element;
       }
     });
+  }
+}
+
+
+// DIALOG COMPONENT
+@Component({
+  selector: 'element-change-dialog',
+  templateUrl: 'element-change-dialog.html',
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
+  ],
+})
+export class ElementChangeDialog {
+  // Inject elements form App Component
+  // appComponent = inject(AppComponent);
+  // elements = this.appComponent.elements;
+
+  constructor() {
+
   }
 }
