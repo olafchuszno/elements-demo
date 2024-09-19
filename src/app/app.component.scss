@@ -1,3 +1,18 @@
 .main-title {
   color: red;
 }
+
+.edit-button {
+  cursor: pointer;
+
+  &__icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.table-data-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

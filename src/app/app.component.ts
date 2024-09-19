@@ -59,9 +59,6 @@ export class AppComponent {
 
   isPopUpOpen: boolean = false;
 
-  // Dialog model values
-  // newValue: string | null = null;
-
   readonly dialog = inject(MatDialog);
 
   tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -92,16 +89,8 @@ export class AppComponent {
       },
     });
 
-    // Code underneath works - consider removing config with data from dialog.open above
-    // And  learn how to make JUST the top part work -
-    // and if it would really be easier to just pass the data into the dialog
-    // - why would that be better ?
-    // this.elementUnderEdit = {position, field};
-
     dialogRef.afterClosed().subscribe((newValue) => {
       if (newValue !== undefined) {
-        console.log('POPUP CLOSED. VALUE UNDER');
-        console.log(newValue);
         this.finishEditingElement({ position, field, newValue });
       }
     });
