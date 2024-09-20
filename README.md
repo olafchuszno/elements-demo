@@ -1,27 +1,39 @@
-# ElementsTest
+# Element Table Application: Angular + TypeScript + SCSS + Angular Material
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
+## Live Demo
 
-## Development server
+### A live version of the application is available at: [Demo Link](https://olafchuszno.github.io/elements-demo/)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### To start the application locally on your machine:
+* Open Terminal or Command Prompt.
+* Clone the repository: run this command git clone https://github.com/olafchuszno/elements-demo.git in your terminal.
+* Navigate to your project directory: cd your-repo.
+* Install dependencies: run this command npm install.
+* Start the app: run this command npm start.
+* Stop the server when done with (Ctrl + C).
 
-## Code scaffolding
+## Key Features
+* Data Editing: Users can edit any element's properties using a popup with input fields for changes. The table updates dynamically without mutating the original data.
+* Dynamic Filtering: A filter input allows users to filter results across all columns, applying the filter after a 2-second debounce to enhance performance.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Technologies Used
+* Angular 18.2.2: For building the user interface and handling application logic.
+* TypeScript: For static type-checking, ensuring code reliability and maintainability.
+* SCSS: For modular and maintainable styling.
+* Angular Material: For pre-built UI components and a modern design.
 
-## Build
+## External Libraries
+Angular Material: Used to implement UI components and ensure a consistent look and feel.
+RxJS: For reactive programming and handling asynchronous operations.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Overview The application simulates data retrieval of chemical elements using an initial dataset and displays it in a structured table format with the following columns:
 
-## Running unit tests
+* Number
+* Name
+* Weight
+* Symbol
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## App Features
+* Element Data Retrieval: Simulates fetching element data at application startup.
+* Editable Table Rows: Each row in the table can be edited through a popup, allowing users to change values without altering the original data set.
+* Debounced Filtering: The application includes a filter input that allows users to filter results across all fields, with a delay of 2 seconds to enhance user experience and performance.
