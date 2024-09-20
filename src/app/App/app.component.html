@@ -14,6 +14,7 @@
   <table class="elements-table" mat-table [dataSource]="filteredElements">
     <ng-container matColumnDef="position">
       <th mat-header-cell *matHeaderCellDef>
+        {{screenWidth && screenWidth < 385 ? 'No' : 'Number'}}
       </th>
       <td mat-cell *matCellDef="let element">{{element.position}}</td>
     </ng-container>
