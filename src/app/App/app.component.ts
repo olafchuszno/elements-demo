@@ -64,14 +64,24 @@ export class AppComponent {
   tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   constructor() {
-    this.elementsService.getAllElements().then((elements) => {
-      this.elements = elements;
-      this.filteredElements = elements;
-    });
+    const localElements = localStorage.getItem('elements');
+
+    if (localElements !== null) {
+      this.setElements(JSON.parse(localElements) as PeriodicElement[])
+    } else {
+      this.elementsService.getAllElements().then((elements) => {
+        this.setElements(elements)
+      });
+    }
 
     this.filterInput.valueChanges
       .pipe(debounceTime(2000), distinctUntilChanged())
       .subscribe((text: string | null) => this.filterElements(text || ''));
+  }
+
+  setElements(elements: PeriodicElement[]) {
+    this.elements = elements;
+    this.filteredElements = elements;
   }
 
   openDialog(
@@ -130,10 +140,6 @@ export class AppComponent {
   ) {
     const { position, field, newValue } = editedElementData;
 
-    console.log('Changing logic | newConvertedValue = ', newValue);
-    console.log('field to change = ', field);
-    console.log('position = ', position);
-
     this[elementsArray] = this[elementsArray].map((element) => {
       if (element.position === position) {
         return {
@@ -144,5 +150,9 @@ export class AppComponent {
         return element;
       }
     });
+
+    if (elementsArray === 'elements') {
+      localStorage.setItem('elements', JSON.stringify(this.elements))
+    }
   }
 }
