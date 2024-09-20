@@ -3,3 +3,9 @@
     @content
   }
 }
+
+@mixin for-mobile-xs() {
+  @media (max-width: 385px) {
+    @content
+  }
+}

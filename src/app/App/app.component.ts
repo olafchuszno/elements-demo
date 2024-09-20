@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -59,6 +59,8 @@ export class AppComponent {
 
   isPopUpOpen: boolean = false;
 
+  screenWidth: number | undefined = undefined;
+
   readonly dialog = inject(MatDialog);
 
   tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
@@ -77,7 +79,15 @@ export class AppComponent {
     this.filterInput.valueChanges
       .pipe(debounceTime(2000), distinctUntilChanged())
       .subscribe((text: string | null) => this.filterElements(text || ''));
+
+    this.getScreenSize();
   }
+
+  @HostListener('window:resize', ['$event'])
+    getScreenSize() {
+      this.screenWidth = window.innerWidth;
+    }
+
 
   setElements(elements: PeriodicElement[]) {
     this.elements = elements;
