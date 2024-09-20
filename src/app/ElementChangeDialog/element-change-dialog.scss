@@ -1,1 +1,11 @@
-// not empty
+@use '../../variables' as *;
+
+.dialog-content {
+  display: flex;
+
+  flex-direction: column;
+
+  &__error {
+    color: $color-accent
+  }
+}
