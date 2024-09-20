@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { ElementField } from "../App/app.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: 'element-change-dialog',
@@ -12,6 +13,7 @@ import { ElementField } from "../App/app.component";
   styleUrl: './element-change-dialog.scss',
   standalone: true,
   imports: [
+    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
@@ -21,6 +23,7 @@ import { ElementField } from "../App/app.component";
 })
 
 export class ElementChangeDialog {
+[x: string]: any;
   public data: {
     position: number
     elementName: string;
@@ -38,5 +41,9 @@ export class ElementChangeDialog {
     }
   ) {
     this.data = data;
+  }
+
+  isValidWeight(weight: string) {
+    return !Number.isNaN(+weight)
   }
 }
