@@ -1,5 +1,5 @@
-import { Component, Inject, inject } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -120,8 +120,6 @@ export class AppComponent {
       field,
       newValue: newConvertedValue,
     });
-
-    console.log({ elements: this.elements });
   }
 
   filterElements(text: string): void {
