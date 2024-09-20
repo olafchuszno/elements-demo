@@ -5,7 +5,7 @@
 }
 
 @mixin for-mobile-xs() {
-  @media (max-width: 385px) {
+  @media (max-width: 396px) {
     @content
   }
 }
