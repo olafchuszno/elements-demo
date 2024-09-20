@@ -1,7 +1,19 @@
-@use '../variables' as *;
+@use '../../variables' as *;
 
 .main {
-  max-width: 1024px;
+  min-width: 420px;
+
+  @media (min-width: 1200px) {
+    width: 1000px;
+  }
+
+  @media (min-width: 1000px) {
+    width: 800px;
+  }
+
+  @media (min-width: 800px) {
+    width: 600px;
+  }
 }
 
 .main-title {

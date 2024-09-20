@@ -4,15 +4,15 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { ElementsService } from './elements.service';
+import { ElementsService } from '../elements.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import {
-  MAT_DIALOG_DATA,
   MatDialog,
   MatDialogModule,
 } from '@angular/material/dialog';
+import { ElementChangeDialog } from '../ElementChangeDialog/element-change-dialog.component';
 
 export interface PeriodicElement {
   position: number;
@@ -21,9 +21,9 @@ export interface PeriodicElement {
   symbol: string;
 }
 
-type ElementField = keyof PeriodicElement;
+export type ElementField = keyof PeriodicElement;
 
-interface EditedElementData {
+export interface EditedElementData {
   position: number;
   field: ElementField;
   newValue: string | number;
@@ -144,41 +144,5 @@ export class AppComponent {
         return element;
       }
     });
-  }
-}
-
-// DIALOG COMPONENT
-@Component({
-  selector: 'element-change-dialog',
-  templateUrl: 'element-change-dialog.html',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-  ],
-})
-export class ElementChangeDialog {
-  /* Inject elements form App Component with the MAT_DIALOG_DATA
-  this way we have access to the edited element's data */
-  public data: {
-    position: number
-    elementName: string;
-    field: ElementField
-    currentValue: string | number
-  }
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA)
-    data: {
-      position: number;
-      elementName: string;
-      field: ElementField;
-      currentValue: string | number;
-    }
-  ) {
-    this.data = data;
   }
 }
