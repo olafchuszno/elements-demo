@@ -1,7 +1,11 @@
 @use '../../variables' as *;
+@use '../../mixins' as *;
 
 .main {
-  min-width: 420px;
+  margin: 0 auto;
+  padding: 0 24px;
+
+  transition: width 1s ease;
 
   @media (min-width: 1200px) {
     width: 1000px;
@@ -33,10 +37,27 @@
 .elements-table {
   padding: 10px 20px;
   border-radius: 16px;
+
+  transition: width 1s ease;
 }
 
 .table-data-content {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.mdc-data-table__cell, .mat-mdc-header-cell {
+  padding: 0 16px;
+  width: 25%;
+
+  transition: all 1s ease;
+
+  @include for-mobile() {
+    padding-right: 0px;
+  }
+
+  @media (max-width: 380px) {
+    padding: 0;
+  }
 }
