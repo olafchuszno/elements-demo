@@ -1,12 +1,18 @@
 <div class="element-edit-dialog">
   <h2 mat-dialog-content>
-    Change
-    {{ data.field.charAt(0).toLocaleUpperCase() + data.field.slice(1) }} of {{ data.elementName.charAt(0).toLocaleUpperCase() + data.elementName.slice(1) }}
+    Change {{ data.field.charAt(0).toLocaleUpperCase() + data.field.slice(1) }}
+    of {{ data.elementName.charAt(0).toLocaleUpperCase() +
+    data.elementName.slice(1) }}
   </h2>
 
   <mat-dialog-content class="dialog-content">
     <mat-form-field>
-      <input matInput [value]="data.currentValue" type="data.position === 'weight' ? 'number' : 'text'" #newValue >
+      <input
+        matInput
+        [value]="data.currentValue"
+        type="data.position === 'weight' ? 'number' : 'text'"
+        #newValue
+      />
     </mat-form-field>
 
     <span *ngIf="!newValue.value.length" class="dialog-content__error">
@@ -19,14 +25,19 @@
     >
       Value has to be a number
     </span>
-
-
-
   </mat-dialog-content>
 
   <mat-dialog-actions>
     <button mat-button [mat-dialog-close]="data.currentValue">Cancel</button>
 
-    <button [disabled]="!newValue.value.length || !this.isValidWeight(newValue.value)" mat-button [mat-dialog-close]="newValue.value">Change the Value</button>
+    <button
+      [disabled]="!newValue.value.length
+      || (data.field === 'weight'
+      && !this.isValidWeight(newValue.value))"
+      mat-button
+      [mat-dialog-close]="newValue.value"
+    >
+      Change the Value
+    </button>
   </mat-dialog-actions>
 </div>
