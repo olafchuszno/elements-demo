@@ -91,11 +91,11 @@ export class AppComponent {
       .pipe(debounceTime(2000), distinctUntilChanged())
       .subscribe((text: string | null) => this.filterElements(text || ''));
 
-    this.getScreenSize();
+    this.updateScreenSize();
   }
 
   @HostListener('window:resize', ['$event'])
-  getScreenSize() {
+  updateScreenSize() {
     this.screenWidth = window.innerWidth;
   }
 
