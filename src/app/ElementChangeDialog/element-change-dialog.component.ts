@@ -4,8 +4,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { ElementField } from "../App/app.component";
 import { CommonModule } from "@angular/common";
+import { ElementField } from "../App/app.component";
 
 @Component({
   selector: 'element-change-dialog',

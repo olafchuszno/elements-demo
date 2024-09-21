@@ -1,9 +1,9 @@
 import { Component, HostListener, inject } from '@angular/core';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ElementsService } from '../elements.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
