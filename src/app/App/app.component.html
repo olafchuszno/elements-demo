@@ -11,7 +11,7 @@
     />
   </mat-form-field>
 
-  @if (!filteredElements.length) {
+  @if (!isFetchingElements && !filteredElements.length) {
     <span class="no-elements">
       No elements found.
     </span>

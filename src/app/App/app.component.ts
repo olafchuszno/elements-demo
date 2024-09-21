@@ -8,10 +8,7 @@ import { ElementsService } from '../elements.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  MatDialog,
-  MatDialogModule,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ElementChangeDialog } from '../ElementChangeDialog/element-change-dialog.component';
 import { LocalStorageService } from '../core/local-storage.service';
 
@@ -49,6 +46,8 @@ export interface EditedElementData {
 export class AppComponent {
   title = 'elements-test';
 
+  isFetchingElements: boolean = false;
+
   elements: PeriodicElement[] = [];
   elementsService: ElementsService = inject(ElementsService);
 
@@ -69,14 +68,23 @@ export class AppComponent {
   currentFilter: string = '';
 
   constructor() {
+    this.isFetchingElements = true;
+
     const localElements = this.localStorageService.getAllElements();
 
     if (localElements === null) {
-      this.elementsService.getAllElements().then((elements) => {
-        this.setElements(elements)
-      });
+      this.elementsService
+        .getAllElements()
+        .then((elements) => {
+          this.setElements(elements);
+        })
+        .finally(() => {
+          this.isFetchingElements = false;
+        });
     } else {
       this.setElements(localElements);
+
+      this.isFetchingElements = false;
     }
 
     this.filterInput.valueChanges
@@ -87,10 +95,9 @@ export class AppComponent {
   }
 
   @HostListener('window:resize', ['$event'])
-    getScreenSize() {
-      this.screenWidth = window.innerWidth;
-    }
-
+  getScreenSize() {
+    this.screenWidth = window.innerWidth;
+  }
 
   setElements(elements: PeriodicElement[]) {
     this.elements = elements;
@@ -131,7 +138,7 @@ export class AppComponent {
 
     this.updateFilteredElements();
 
-    this.updateElementsInStorage()
+    this.updateElementsInStorage();
   }
 
   filterElements(text: string): void {
@@ -165,9 +172,7 @@ export class AppComponent {
    * @param editedElementData
    * Updates element value in the main elements state,
    */
-  changeElementValue(
-    editedElementData: EditedElementData
-  ) {
+  changeElementValue(editedElementData: EditedElementData) {
     const { position, field, newValue } = editedElementData;
 
     this.elements = this.elements.map((element) => {
