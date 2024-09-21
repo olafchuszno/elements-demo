@@ -8,10 +8,12 @@
   <mat-dialog-content class="dialog-content">
     <mat-form-field>
       <input
+      tabindex="1"
         matInput
         [value]="data.currentValue"
         [type]="data.field === 'weight' ? 'number' : 'text'"
         #newValue
+        (keydown.enter)="confirmButton.focus()"
       />
     </mat-form-field>
 
@@ -28,14 +30,16 @@
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data.currentValue">Cancel</button>
+    <button tabindex="2" mat-button [mat-dialog-close]="data.currentValue">Cancel</button>
 
     <button
+    tabindex="3"
       [disabled]="!newValue.value.length
       || (data.field === 'weight'
       && !this.isValidWeight(newValue.value))"
       mat-button
       [mat-dialog-close]="newValue.value"
+      #confirmButton
     >
       Change the Value
     </button>
