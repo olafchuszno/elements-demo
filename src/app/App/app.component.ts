@@ -121,16 +121,6 @@ export class AppComponent {
     const { position, field, newValue } = editedElementData;
     const newConvertedValue = field === 'weight' ? +newValue : newValue;
 
-    if (Number.isNaN(newConvertedValue)) {
-      if (String(newValue).includes(',')) {
-        alert('Weight value has to be numeric. (A comma "," makes the value a text - consider changing it for a dot ".")')
-      } else {
-        alert('Weight value has to be numeric.')
-      }
-
-      return;
-    }
-
     this.updateElementValue('filteredElements', {
       position,
       field,
