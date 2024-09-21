@@ -48,8 +48,6 @@ export interface EditedElementData {
 export class AppComponent {
   title = 'elements-test';
 
-  timeoutId: any;
-
   elements: PeriodicElement[] = [];
   elementsService: ElementsService = inject(ElementsService);
 
