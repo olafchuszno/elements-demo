@@ -10,7 +10,7 @@
       <input
         matInput
         [value]="data.currentValue"
-        type="data.position === 'weight' ? 'number' : 'text'"
+        [type]="data.field === 'weight' ? 'number' : 'text'"
         #newValue
       />
     </mat-form-field>
