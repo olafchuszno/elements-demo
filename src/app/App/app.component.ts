@@ -13,6 +13,7 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { ElementChangeDialog } from '../ElementChangeDialog/element-change-dialog.component';
+import { LocalStorageService } from '../core/local-storage.service';
 
 export interface PeriodicElement {
   position: number;
@@ -51,6 +52,8 @@ export class AppComponent {
   elements: PeriodicElement[] = [];
   elementsService: ElementsService = inject(ElementsService);
 
+  localStorageService: LocalStorageService = inject(LocalStorageService);
+
   filterInput = new FormControl('');
 
   filteredElements: PeriodicElement[] = [];
@@ -64,14 +67,14 @@ export class AppComponent {
   tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
   constructor() {
-    const localElements = localStorage.getItem('elements');
+    const localElements = this.localStorageService.getAllElements();
 
-    if (localElements !== null) {
-      this.setElements(JSON.parse(localElements) as PeriodicElement[])
-    } else {
+    if (localElements === null) {
       this.elementsService.getAllElements().then((elements) => {
         this.setElements(elements)
       });
+    } else {
+      this.setElements(localElements);
     }
 
     this.filterInput.valueChanges
@@ -168,7 +171,7 @@ export class AppComponent {
     });
 
     if (elementsArray === 'elements') {
-      localStorage.setItem('elements', JSON.stringify(this.elements))
+      this.localStorageService.setElements(this.elements);
     }
   }
 }
