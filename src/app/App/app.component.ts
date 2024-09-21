@@ -66,6 +66,8 @@ export class AppComponent {
 
   tableColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
+  currentFilter: string = '';
+
   constructor() {
     const localElements = this.localStorageService.getAllElements();
 
@@ -121,19 +123,20 @@ export class AppComponent {
     const { position, field, newValue } = editedElementData;
     const newConvertedValue = field === 'weight' ? +newValue : newValue;
 
-    this.updateElementValue('filteredElements', {
+    this.changeElementValue({
       position,
       field,
       newValue: newConvertedValue,
     });
-    this.updateElementValue('elements', {
-      position,
-      field,
-      newValue: newConvertedValue,
-    });
+
+    this.updateFilteredElements();
+
+    this.updateElementsInStorage()
   }
 
   filterElements(text: string): void {
+    this.currentFilter = text;
+
     this.filteredElements = this.elements.filter((element) => {
       return Object.values(element).some((elementValue) =>
         String(elementValue)
@@ -143,13 +146,31 @@ export class AppComponent {
     });
   }
 
-  updateElementValue(
-    elementsArray: 'elements' | 'filteredElements',
+  updateFilteredElements() {
+    this.filteredElements = this.elements.filter((element) => {
+      return Object.values(element).some((elementValue) =>
+        String(elementValue)
+          .toLocaleLowerCase()
+          .includes(this.currentFilter.toLocaleLowerCase())
+      );
+    });
+  }
+
+  updateElementsInStorage(): void {
+    this.localStorageService.setElements(this.elements);
+  }
+
+  /**
+   *
+   * @param editedElementData
+   * Updates element value in the main elements state,
+   */
+  changeElementValue(
     editedElementData: EditedElementData
   ) {
     const { position, field, newValue } = editedElementData;
 
-    this[elementsArray] = this[elementsArray].map((element) => {
+    this.elements = this.elements.map((element) => {
       if (element.position === position) {
         return {
           ...element,
@@ -159,9 +180,5 @@ export class AppComponent {
         return element;
       }
     });
-
-    if (elementsArray === 'elements') {
-      this.localStorageService.setElements(this.elements);
-    }
   }
 }
