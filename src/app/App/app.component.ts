@@ -14,7 +14,6 @@ import { LocalStorageService } from '../core/local-storage.service';
 import { rxState } from '@rx-angular/state';
 import { RxPush } from '@rx-angular/template/push';
 
-
 export interface PeriodicElement {
   position: number;
   name: string;
@@ -67,13 +66,12 @@ export class AppComponent {
     });
   });
 
-  readonly elements$ = this.state.select('elements')
-  readonly filteredElements$ = this.state.select('filteredElements')
-  readonly currentFilter$ = this.state.select('currentFilter')
-  readonly isFetchingElements$ = this.state.select('isFetchingElements')
+  readonly elements$ = this.state.select('elements');
+  readonly filteredElements$ = this.state.select('filteredElements');
+  readonly currentFilter$ = this.state.select('currentFilter');
+  readonly isFetchingElements$ = this.state.select('isFetchingElements');
 
   elements: PeriodicElement[] = [];
-
 
   filterInput = new FormControl('');
 
@@ -102,29 +100,30 @@ export class AppComponent {
       this.state.set({ isFetchingElements: false });
     }
 
-    this.state.connect('filteredElements', this.filterInput.valueChanges
-      .pipe(
+    this.state.connect(
+      'filteredElements',
+      this.filterInput.valueChanges.pipe(
         debounceTime(2000),
         distinctUntilChanged(),
         map((filterInputValue) => {
           this.filterElements(filterInputValue || '');
-          return this.state.get('filteredElements')
+          return this.state.get('filteredElements');
         })
       )
-    )
+    );
 
     this.updateScreenSize();
   }
 
   getAllElements() {
     this.elementsService
-    .getAllElements()
-    .then((elements) => {
-      this.setElements(elements);
-    })
-    .finally(() => {
-      this.state.set({ isFetchingElements: false });
-    });
+      .getAllElements()
+      .then((elements) => {
+        this.setElements(elements);
+      })
+      .finally(() => {
+        this.state.set({ isFetchingElements: false });
+      });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -135,7 +134,7 @@ export class AppComponent {
   setElements(elements: PeriodicElement[]) {
     this.state.set({
       elements: elements,
-      filteredElements: elements
+      filteredElements: elements,
     });
   }
 
@@ -177,7 +176,7 @@ export class AppComponent {
   }
 
   filterElements(text: string): void {
-    this.state.set({currentFilter: text});
+    this.state.set({ currentFilter: text });
 
     const filteredElements = this.state.get('elements').filter((element) => {
       return Object.values(element).some((elementValue) =>
@@ -187,7 +186,7 @@ export class AppComponent {
       );
     });
 
-    this.state.set({filteredElements});
+    this.state.set({ filteredElements });
   }
 
   updateFilteredElements() {
@@ -217,6 +216,6 @@ export class AppComponent {
       }
     });
 
-    this.state.set({elements: updatedElements})
+    this.state.set({ elements: updatedElements });
   }
 }
