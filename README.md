@@ -1,4 +1,4 @@
-# Element Table Application: Angular + TypeScript + SCSS + Angular Material
+# Periodic Element Table Application: Angular + TypeScript + SCSS + Angular Material + RxAngular
 
 ## Live Demo
 
@@ -21,10 +21,12 @@
 * TypeScript: For static type-checking, ensuring code reliability and maintainability.
 * SCSS: For modular and maintainable styling.
 * Angular Material: For pre-built UI components and a modern design.
+* RxAngular: For application state management.
 
 ## External Libraries
 Angular Material: Used to implement UI components and ensure a consistent look and feel.
 RxJS: For reactive programming and handling asynchronous operations.
+RxAngular: For application state management.
 
 ## Overview The application simulates data retrieval of chemical elements using an initial dataset and displays it in a structured table format with the following columns:
 
