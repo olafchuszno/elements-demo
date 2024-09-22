@@ -65,7 +65,17 @@
   }
 }
 
-.no-elements {
-  margin-left: 16px;
-  color: $color-accent
+.filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  &__no-elements {
+    margin-left: 16px;
+    color: $color-accent
+  }
+
+  @media (max-width: 424px) {
+    padding-bottom: 24px;
+  }
 }

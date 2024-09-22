@@ -1,23 +1,24 @@
 <main class="main">
   <h1 class="main-title">Periodic Elements</h1>
 
-  <mat-form-field>
-    <input
-      matInput
-      [formControl]="filterInput"
-      type="text"
-      placeholder="Filter elements"
-    />
-  </mat-form-field>
-
-  <span
-    *ngIf="
-      !(isFetchingElements$ | async) && !(filteredElements$ | async)?.length
-    "
-    class="no-elements"
-  >
-    No elements found.
-  </span>
+  <div class="filter">
+    <mat-form-field>
+      <input
+        matInput
+        [formControl]="filterInput"
+        type="text"
+        placeholder="Filter elements"
+      />
+    </mat-form-field>
+    <span
+      *ngIf="
+        !(isFetchingElements$ | async) && !(filteredElements$ | async)?.length
+      "
+      class="filter__no-elements"
+    >
+      No elements found.
+    </span>
+  </div>
 
   <table
     class="elements-table"
