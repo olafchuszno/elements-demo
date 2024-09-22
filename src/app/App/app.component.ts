@@ -13,8 +13,6 @@ import { ElementChangeDialog } from '../ElementChangeDialog/element-change-dialo
 import { LocalStorageService } from '../core/local-storage.service';
 import { rxState } from '@rx-angular/state';
 import { RxPush } from '@rx-angular/template/push';
-import { RxLet } from '@rx-angular/template/let';
-import { RxFor } from '@rx-angular/template/for';
 
 
 export interface PeriodicElement {
@@ -51,14 +49,15 @@ interface State {
     MatTableModule,
     MatFormFieldModule,
     MatDialogModule,
-    RxFor,
-    RxLet,
     RxPush,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  elementsService: ElementsService = inject(ElementsService);
+  localStorageService: LocalStorageService = inject(LocalStorageService);
+
   private state = rxState<State>(({ set }) => {
     set({
       elements: [],
@@ -72,16 +71,9 @@ export class AppComponent {
   readonly filteredElements$ = this.state.select('filteredElements')
   readonly currentFilter$ = this.state.select('currentFilter')
   readonly isFetchingElements$ = this.state.select('isFetchingElements')
-  state$ = this.state.select();
-
 
   elements: PeriodicElement[] = [];
-  filteredElements: PeriodicElement[] = [];
-  isFetchingElements: boolean = false;
 
-  elementsService: ElementsService = inject(ElementsService);
-
-  localStorageService: LocalStorageService = inject(LocalStorageService);
 
   filterInput = new FormControl('');
 
@@ -103,14 +95,7 @@ export class AppComponent {
     const localElements = this.localStorageService.getAllElements();
 
     if (localElements === null) {
-      this.elementsService
-        .getAllElements()
-        .then((elements) => {
-          this.setElements(elements);
-        })
-        .finally(() => {
-          this.state.set({ isFetchingElements: false });
-        });
+      this.getAllElements();
     } else {
       this.setElements(localElements);
 
@@ -129,6 +114,17 @@ export class AppComponent {
     )
 
     this.updateScreenSize();
+  }
+
+  getAllElements() {
+    this.elementsService
+    .getAllElements()
+    .then((elements) => {
+      this.setElements(elements);
+    })
+    .finally(() => {
+      this.state.set({ isFetchingElements: false });
+    });
   }
 
   @HostListener('window:resize', ['$event'])
