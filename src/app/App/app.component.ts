@@ -106,8 +106,8 @@ export class AppComponent {
       .pipe(
         debounceTime(2000),
         distinctUntilChanged(),
-        map((filterValue) => {
-          this.filterElements(filterValue || '');
+        map((filterInputValue) => {
+          this.filterElements(filterInputValue || '');
           return this.state.get('filteredElements')
         })
       )
@@ -190,17 +190,8 @@ export class AppComponent {
     this.state.set({filteredElements});
   }
 
-  // TODO: Refactor - just call filterElements with currentFilter from the state
   updateFilteredElements() {
-    const filteredElements = this.state.get('elements').filter((element) => {
-      return Object.values(element).some((elementValue) =>
-        String(elementValue)
-          .toLocaleLowerCase()
-          .includes(this.state.get('currentFilter').toLocaleLowerCase())
-      );
-    });
-
-    this.state.set({ filteredElements });
+    this.filterElements(this.state.get('currentFilter'));
   }
 
   updateElementsInStorage(): void {
